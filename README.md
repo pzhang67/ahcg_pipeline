@@ -26,7 +26,7 @@ head -100000 NIST7035_TAAGGCGA_L001_R2_001.fastq > test_r2.fastq
 ```
 ## How to run it
 ## Set up github
--Changing a remote's URL
+- Changing a remote's URL
 
 https://help.github.com/articles/changing-a-remote-s-url/
 ```
@@ -36,16 +36,16 @@ Check the remote's URL with :
 ```
 git remote -v
 ```
--Set the directory will not pull to the Github
+- Set the directory will not pull to the Github
  
 add directory name into hidden file .gitignore (in folder ahcg_pipeline)
 
 ## Set up environment
--Pull the pipeline (Also pull the tools if needed)
+- Pull the pipeline (Also pull the tools if needed)
 
 https://github.com/shashidhar22/ahcg_pipeline
 
--Fasta index using Samtools
+- Fasta index using Samtools
 
 Install Samtools
 
@@ -54,7 +54,7 @@ use samtools faidx to generate index:
 samtools faidx hg19.fa
 ```
 
--Genome dict file using picard 
+- Genome dict file using picard 
 
 Genome dict file using picard will produce hg19.dict
 ```
@@ -64,11 +64,11 @@ tips: make sure java version is higher than 1.8.
 
 ## Running pipeline
 
--Find help with:
+- Find help with:
 ```
 python3 ahcg_pipeline.py -h
 ```
--Running code example:
+- Running code example:
 ```
 python3 ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/bowtie2-2.2.9/bowtie2 -p ./lib/picard.jar -g ./lib/GenomeAnalysisTK.jar -i ./resources/test/test_r1.fastq ./resources/test/test_r2.fastq -w ./resources/genome/hg19 -d ./resources/dbsnp/dbsnp_138.hg19.vcf -r ./resources/genome/hg19.fa -a ./lib/Trimmomatic-0.36/adapters/NexteraPE-PE.fa -o ./hw1
 ```
