@@ -1,0 +1,3 @@
+# bed to bam
+bedtools bedtobam -i BRCA1.bed -g 
+# bam to fastq
