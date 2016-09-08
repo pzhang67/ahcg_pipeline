@@ -32,7 +32,8 @@ https://help.github.com/articles/changing-a-remote-s-url/
 ```
 git remote set-url https://github.com/<your_account>/ahcg_pipeline.git
 ```
-	Check the remote's URL with : 
+    Check the remote's URL with : 
+
 ```
 git remote -v
 ```
@@ -60,7 +61,7 @@ samtools faidx hg19.fa
 ```
 java -jar picard.jar CreateSequenceDictionary R=hg19.fa O=reference.dict
 ```
-	tips: make sure java version is higher than 1.8.
+    tips: make sure java version is higher than 1.8.
 
 ## Running pipeline
 
