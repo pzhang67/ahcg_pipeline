@@ -24,7 +24,7 @@ gunzip NIST7035_TAAGGCGA_L001_R1_001.fastq.gz
 gunzip NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
 head -100000 NIST7035_TAAGGCGA_L001_R1_001.fastq > test_r1.fastq
 head -100000 NIST7035_TAAGGCGA_L001_R2_001.fastq > test_r2.fastq
-## Test data
+```{sh}
 ## How to run it
 
 ## Pull the pipeline (Also pull the tools if needed)
