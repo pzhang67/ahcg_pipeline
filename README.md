@@ -32,13 +32,13 @@ https://help.github.com/articles/changing-a-remote-s-url/
 ```
 git remote set-url https://github.com/<your_account>/ahcg_pipeline.git
 ```
-Check the remote's URL with : 
+	Check the remote's URL with : 
 ```
 git remote -v
 ```
 - Set the directory will not pull to the Github
  
-add directory name into hidden file .gitignore (in folder ahcg_pipeline)
+ add directory name into hidden file .gitignore (in folder ahcg_pipeline)
 
 ## Set up environment
 - Pull the pipeline (Also pull the tools if needed)
@@ -47,20 +47,20 @@ https://github.com/shashidhar22/ahcg_pipeline
 
 - Fasta index using Samtools
 
-Install Samtools
+  Install Samtools
 
-use samtools faidx to generate index:
+  use samtools faidx to generate index:
 ```
 samtools faidx hg19.fa
 ```
 
 - Genome dict file using picard 
 
-Genome dict file using picard will produce hg19.dict
+  Genome dict file using picard will produce hg19.dict
 ```
 java -jar picard.jar CreateSequenceDictionary R=hg19.fa O=reference.dict
 ```
-tips: make sure java version is higher than 1.8.
+	tips: make sure java version is higher than 1.8.
 
 ## Running pipeline
 

@@ -1,0 +1,1 @@
+bedtools getfasta -s -fi ./resources/genome/hg19.fa -bed exomes007294.bed -fo nm_007294.out
