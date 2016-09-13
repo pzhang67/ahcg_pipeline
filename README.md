@@ -24,8 +24,8 @@ gunzip NIST7035_TAAGGCGA_L001_R2_001.fastq.gz
 head -100000 NIST7035_TAAGGCGA_L001_R1_001.fastq > test_r1.fastq
 head -100000 NIST7035_TAAGGCGA_L001_R2_001.fastq > test_r2.fastq
 ```
-## How to run it
-## Set up github
+
+### Set up github
 - Changing a remote's URL
 
 https://help.github.com/articles/changing-a-remote-s-url/
@@ -41,7 +41,7 @@ git remote -v
  
  add directory name into hidden file .gitignore (in folder ahcg_pipeline)
 
-## Set up environment
+### Set up environment
 - Pull the pipeline (Also pull the tools if needed)
 
 https://github.com/shashidhar22/ahcg_pipeline
@@ -63,7 +63,7 @@ java -jar picard.jar CreateSequenceDictionary R=hg19.fa O=reference.dict
 ```
     tips: make sure java version is higher than 1.8.
 
-## Running pipeline
+### Running pipeline
 
 - Find help with:
 ```
@@ -71,5 +71,40 @@ python3 ahcg_pipeline.py -h
 ```
 - Running code example:
 ```
-python3 ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/bowtie2-2.2.9/bowtie2 -p ./lib/picard.jar -g ./lib/GenomeAnalysisTK.jar -i ./resources/test/test_r1.fastq ./resources/test/test_r2.fastq -w ./resources/genome/hg19 -d ./resources/dbsnp/dbsnp_138.hg19.vcf -r ./resources/genome/hg19.fa -a ./lib/Trimmomatic-0.36/adapters/NexteraPE-PE.fa -o ./hw1
+python3 ahcg_pipeline.py 
+-t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar 
+-b ./lib/bowtie2-2.2.9/bowtie2 
+-p ./lib/picard.jar 
+-g ./lib/GenomeAnalysisTK.jar 
+-i ./resources/test/test_r1.fastq ./resources/test/test_r2.fastq 
+-w ./resources/genome/hg19 -d ./resources/dbsnp/dbsnp_138.hg19.vcf 
+-r ./resources/genome/hg19.fa 
+-a ./lib/Trimmomatic-0.36/adapters/NexteraPE-PE.fa 
+-o ./hw1
 ```
+
+## Extract sequences for the gene of interest: BRCA1
+
+### Download gene coordinates file for hg19
+```
+wget http://vannberg.biology.gatech.edu/data/ahcg2016/reference_genome/hg19_refGene.txt
+```
+
+### Grep NM_007294 exome
+```
+grep NM_007294 ./resources/hg19_refGene.txt
+```
+
+### Write a code to generate bed file for NM_007294
+```
+./get_bed.pl > onelineBRCA1.bed
+```
+
+### Extract sequence of NM_007294
+```
+bedtools getfasta -s -fi ./resources/genome/hg19.fa -bed ./hw2/onelineBRCA1.bed -fo ./hw2/NM_007294.out
+```
+
+
+
+
