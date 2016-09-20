@@ -105,6 +105,33 @@ grep NM_007294 ./resources/hg19_refGene.txt
 bedtools getfasta -s -fi ./resources/genome/hg19.fa -bed ./hw2/onelineBRCA1.bed -fo ./hw2/NM_007294.out
 ```
 
+## Extracting reads mapping to BRCA1 from NA12878 HiSeq Exome dataset
 
+### Download gene coordinates file for hg19
+```
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_1_NA12878.bwa.markDuplicates.bam
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_2_NA12878.bwa.markDuplicates.bam
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7086_H7AP8ADXX_CGTACTAG_1_NA12878.bwa.markDuplicates.bam
+wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST_NIST7086_H7AP8ADXX_CGTACTAG_2_NA12878.bwa.markDuplicates.bam
+```
 
+### Merge BAM files
+- -R option means only merge the read of on chr17
+```
+samtools merge -R chr17  NA12878_Chr17.bam project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_1_NA12878.bwa.markDuplicates.bam project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_2_NA12878.bwa.markDuplicates.bam project.NIST_NIST7086_H7AP8ADXX_CGTACTAG_1_NA12878.bwa.markDuplicates.bam project.NIST_NIST7086_H7AP8ADXX_CGTACTAG_2_NA12878.bwa.markDuplicates.bam
+```
+
+### Extract region of interest from whole bam file
+```
+samtools view NA12878_Chr17.bam -L onelineBRCA1.bed -b -o BRCA1.bam
+```
+
+### Convert BAM file to FASTQ file
+```
+bedtools bamtofastq -i BRCA1.bam -fq <Fastq_Read1> -fq1 <Fastq_Read2>
+```
+
+### Run the ahcg_pipeline.py
+
+## Compare the variant calling with published data
 
