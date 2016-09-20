@@ -1,0 +1,19 @@
+AR NM_000044.3 313700 Androgen receptor 10661 8
+ATM NM_000051.3 607585 Serine-protein kinase ataxia telangiectasia mutated 13147 68
+BARD1 NM_000465.3 601593 BRCA associated RING domain 1 5523 11
+BRCA1 NM_007298.3 113705 Breast cancer 1, early onset 3699 22
+BRCA2 NM_000059.3 600185 Breast cancer 2, early onset 11386 27
+BRIP1 NM_032043.2 605882 BRCA1-interacting protein 8166 20
+CASP8 NM_001080124.1 601763 Apoptosis-related cysteine protease 8 2750 9
+CDH1 NM_004360.3 192090 Cadherin 1 4815 16
+CHEK2 NM_001005735.1 604373 Serine/threonine checkpoint kinase 2 1991 16
+DIRAS3 NM_004675.2 605193 GTP-binding Ras-like protein 3 1642 2
+ERBB2 NM_001005862.1 164870 Avian erythroblastic leukemia viral oncogene homolog 2 4816 30
+NBN NM_002485.4 602667 Nibrin 4639 16
+PALB2 NM_024675.3 601355 Partner and localizer of BRCA2 4069 13
+PTEN NM_000314.4 601728 Phosphatase and tensin 5572 9
+RAD50 NM_005732.3 604040 DNA repair protein RAD50 homolog 6597 25
+RAD51 NM_001164269.1 179617 DNA repair protein RAD51A homolog 2147 10
+STK11 NM_000455.4 602216 Serine/threonine protein kinase 11 3286 10
+TGFB1 NM_000660.4 190180 Transforming growth factor b1 2217 7
+TP53 NM_000546.5 191170 Tumor protein p53 2591 11
