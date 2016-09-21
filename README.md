@@ -132,6 +132,30 @@ bedtools bamtofastq -i BRCA1.bam -fq <Fastq_Read1> -fq1 <Fastq_Read2>
 ```
 
 ### Run the ahcg_pipeline.py
+```
+python3 ahcg_pipeline.py 
+-t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar 
+-b ./lib/bowtie2-2.2.9/bowtie2 
+-p ./lib/picard.jar 
+-g ./lib/GenomeAnalysisTK.jar 
+-i ./resources/test/test_r1.fastq ./resources/test/test_r2.fastq 
+-w ./resources/genome/hg19 
+-d ./resources/dbsnp/dbsnp_138.hg19.vcf 
+-r ./resources/genome/hg19.fa 
+-a ./lib/Trimmomatic-0.36/adapters/NexteraPE-PE.fa 
+-o ./hw3
+```
 
 ## Compare the variant calling with published data
+
+## Process a list of cancer gene
+### Copy a list of interest gene in to a file
+- gen_list.txt for here
+	Reference : http://www.otogenetics.com/forms/Breast_Cancer_gene_list.pdf
+
+### Get exom in bed file
+- run grep_gen_list.pl in folder get_exon_list will generate a bed file with interest exom (exon_list.bed) and the original data of the interest genes extracted from hg19_refGene.txt.
+```
+./grep_gen_list.pl
+```
 
