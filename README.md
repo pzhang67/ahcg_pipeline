@@ -148,7 +148,32 @@ python3 ahcg_pipeline.py
 
 ## Compare the variant calling with published data
 
+### Download the variants called on the NA12878 exome samples
+```
+wget http://vannberg.biology.gatech.edu/data/variants.vcf
+```
+
+### Download the verified variants calling
+```
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/release/NA12878_HG001/latest/NA12878_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-Solid-10X_CHROM1-X_v3.3_highconf.vcf.gz
+```
+
+### Download the published exom data
+
+### Find the intersection between the three files
+```
+bedtools intersect -wa -header -a variants.vcf 
+-b nexterarapidcapture_exome_targetedregions_v1.2.bed 
+> exom_in_variant.vcf
+
+bedtools intersect -wa -a exom_in_variant.vcf 
+-b NA12878_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-Solid-10X_CHROM1-X_v3.3_highconf.vcf 
+> overlap_variant.vcf
+``` 
+	tips: the file  exom_in_variant.vcf have to have header
+
 ## Process a list of cancer gene
+
 ### Copy a list of interest gene in to a file
 - gen_list.txt for here
 	Reference : http://www.otogenetics.com/forms/Breast_Cancer_gene_list.pdf
