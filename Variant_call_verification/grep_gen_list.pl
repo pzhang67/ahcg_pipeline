@@ -4,13 +4,14 @@ use strict;
 open(IN,"gen_list.txt");
 my $com = "grep \"";
 foreach(<IN>){
-	if($_ =~ /(NM_.+)\.[0-9]/){
-		$com = "$com$1\\|";
-	}
+	my @t = split(" ",$_);
+	chomp $t[1];
+	$com = "$com$t[1]\\|";
+	
 }
 chop $com;
 chop $com;
-$com = "$com\" ../resources/hg19_refGene.txt > bed_list.bed";
+$com = "$com\" ../resources/hg19_refGene.txt > bed_list.txt";
 #print $com;
 system($com);
 close IN;

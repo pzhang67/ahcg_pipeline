@@ -30,7 +30,9 @@ foreach(<BED>){
     my $i = 0;
 
 	while($i < @st){
-        print "$t[2]\t$st[$i]\t$end[$i]\t$t[1]\t$t[8]\t$t[3]\n";
+	    my $start = $st[$i]-20;
+	    my $end = $end[$i]+20;
+	    print "$t[2]\t$start\t$end\t$t[1]\t$t[8]\t$t[3]\n";
         $i++;
 	}
 }

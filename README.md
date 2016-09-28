@@ -61,7 +61,7 @@ samtools faidx hg19.fa
 ```
 java -jar picard.jar CreateSequenceDictionary R=hg19.fa O=reference.dict
 ```
-    tips: make sure java version is higher than 1.8.
+- tips: make sure java version is higher than 1.8.
 
 ### Running pipeline
 
@@ -159,28 +159,62 @@ wget ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/release/NA12878_HG001/latest/NA12
 ```
 
 ### Download the published exom data
+```
+wget http://support.illumina.com/content/dam/illumina-support/documents/documentation/chemistry_documentation/samplepreps_nextera/nexterarapidcapture/nexterarapidcapture_exome_targetedregions_v1.2.bed
+```
+
+### Preprocess vcf format
+- use Preprocess.pl to add “chr” before the chromosome number in verified variants calling downloaded from GIAB
+```
+./Preprocess.pl > NA12878.vcf
+```
 
 ### Find the intersection between the three files
 ```
 bedtools intersect -wa -header -a variants.vcf 
 -b nexterarapidcapture_exome_targetedregions_v1.2.bed 
-> exom_in_variant.vcf
+> exom_in_variant-1.vcf
 
-bedtools intersect -wa -a exom_in_variant.vcf 
--b NA12878_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-Solid-10X_CHROM1-X_v3.3_highconf.vcf 
+bedtools intersect -wa -header -a NA12878.vcf  
+-b nexterarapidcapture_exome_targetedregions_v1.2.bed 
+> exom_in_variant-2.vcf
+
+bedtools intersect -wa -header -a exom_in_variant-1.vcf 
+-b exom_in_variant-2.vcf 
 > overlap_variant.vcf
 ``` 
-	tips: the file  exom_in_variant.vcf have to have header
+- tips: the file  exom_in_variant.vcf have to have header
+- tips: do three-step intersect(showed here) if your system storage is not large enough 
 
 ## Process a list of cancer gene
 
 ### Copy a list of interest gene in to a file
-- gen_list.txt for here
+- generate gen_list.txt by merge the gene in the following to reference
 	Reference : http://www.otogenetics.com/forms/Breast_Cancer_gene_list.pdf
+	Reference : http://www.genedx.com/wp-content/uploads/2016/07/Breast-Ovarian-Panel-Fact-Sheet.pdf
 
 ### Get exom in bed file
 - run grep_gen_list.pl in folder get_exon_list will generate a bed file with interest exom (exon_list.bed) and the original data of the interest genes extracted from hg19_refGene.txt.
+- 20 bases were add to both of the start and end.
 ```
-./grep_gen_list.pl
+./grep_gen_list.pl > exom_list.bed
 ```
+
+### Variant call verification
+- find the difference between our variant calling and verified variant calling on GIAB in the exom area
+```
+bedtools intersect -wa -header -a variants.vcf 
+-b exom_list.bed 
+> exom_variant-1.vcf
+
+bedtools intersect -wa -header -a NA12878.vcf  
+-b exom_list.bed 
+> exom_variant-2.vcf
+
+bedtools intersect -wa -header -a exom_in_variant-1.vcf 
+-b exom_in_variant-2.vcf 
+> overlap_variant.vcf
+```
+
+
 
