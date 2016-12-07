@@ -202,6 +202,7 @@ bedtools intersect -wa -header -a exom_in_variant-1.vcf
 
 ### Variant call verification
 - find the difference between our variant calling and verified variant calling on GIAB in the exom area
+
 ```
 bedtools intersect -wa -header -a variants.vcf 
 -b exom_list.bed 
@@ -216,5 +217,172 @@ bedtools intersect -wa -header -a exom_in_variant-1.vcf
 > overlap_variant.vcf
 ```
 
+- Overlap results were summarized in number\_of\_overlapping_calls.txt .
+
+
+## Verify Variant Calling
+### Download variant calling using the fastq files for NA12878
+
+```
+wget http://vannberglab.biology.gatech.edu/data/ahcg2016/vcf/NA12878_variants.vcf
+```
+
+### Do the overlap between our course calling and reported calling
+
+```
+bedtools intersect -wa -header -a NA12878_variants.vcf 
+-b exom_list.bed 
+> exom_variant_course.vcf
+
+bedtools intersect -wa -header -a NA12878.vcf  
+-b exom_list.bed 
+> exom_variant_repoert.vcf
+
+bedtools intersect -wa -header -a exom_in_variant_course.vcf 
+-b exom_in_variant_repoert.vcf 
+> overlap.vcf
+```
+
+## VariantRecalibrator
+
+### index and dict for gemome.ga
+```
+samtools faidx ../resources/vrlb/genome.fa
+
+java -jar ../lib/picard.jar CreateSequenceDictionary REFERENCE=../resources/vrlb/genome.fa OUTPUT=../resources/vrlb/genome.dict
+```
+
+
+### Run VariantRecalibrator
+
+```
+java -Xmx4g -jar ../lib/GenomeAnalysisTK.jar \
+-T VariantRecalibrator \
+-R ../resources/vrlb/hg19.fa \
+-input NA12878_variants_ahcg.vcf \
+-resource:hapmap,known=false,training=true,truth=true,prior=15.0 ../resources/vrlb/hapmap_3.3.hg19.sites.vcf \
+-resource:omni,known=false,training=true,truth=false,prior=12.0 ../resources/vrlb/1000G_omni2.5.hg19.sites.vcf \
+-resource:1000G,known=false,training=true,truth=false,prior=10.0 ../resources/vrlb/1000G_phase1.snps.high_confidence.hg19.sites.vcf \
+-resource:dbsnp,known=true,training=false,truth=false,prior=2.0 ../resources/vrlb/dbsnp_138.hg19.vcf -an DP \
+-an QD -an FS -an SOR -an MQRankSum -an ReadPosRankSum -mode SNP \
+-tranche 100.0 -tranche 99.9 -tranche 99.0 -tranche 90.0 \
+-recalFile recalibrate_SNP.recal \
+-tranchesFile recalibrate_SNP.tranches
+
+```
+
+### Run GATK again to get vcf file
+```
+java -jar ../lib/GenomeAnalysisTK.jar -T ApplyRecalibration \ 
+-R ../resources/vrlb/hg19.fa \ 
+-input NA12878_variants_ahcg.vcf \ 
+-mode SNP \ -ts_filter_level 99.0 \ -recalFile recalibrate_SNP.recal \ 
+-tranchesFile recalibrate_SNP.tranches \ -o recalibrated_snps_raw_indels.vcf
+```
+
+## Calculate Read Depth Based on Alignment File
+
+### Extract BRCA1 gene chromosome coordinates
+- Extract BRCA1 gene chromosome coordinates from "exom_list.bed"
+```
+grep 'NM_007294' exom_list.bed > brca1.bed
+```
+
+### Extract brca1 alignments
+```
+samtools view -L brca1.bed project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_1_NA12878.bwa.markDuplicates.bam -b > na12878.brca1.bam
+```
+-L: only output alignments overlapping in the input bed file
+-b: output alignments in the bam format
+
+### Computes and summarize coverage for brca1
+```
+bedtools genomecov -ibam na12878.brca1.bam -bga > na12878.brca1.bga.bed
+```
+-ibam BAM file as input for coverage.
+-bga Reporting genome coverage for all positions in BEDGRAPH format.
+
+- This is BedGraph format: chrom chromStart chromEnd dataValue
+
+### Intersection between two bed files
+```
+bedtools intersect -split -a na12878.brca1.bga.bed -b brca1.bed -bed > brca1.final.bed
+```
+-split : only the exon overlaps are reported
+
+## How to annotate the vcf file with pathogenicity
+
+### Download the BRCA variant pathogenic annotation file
+```
+wget http://vannberg.biology.gatech.edu/data/ahcg2016/BRCA/BRCA1_brca_exchange_variants.csv
+wget http://vannberg.biology.gatech.edu/data/ahcg2016/BRCA/BRCA2_brca_exchange_variants.csv
+```
+
+### Use the PathgenicAnnotation.py script to match the variants between vcf file and pathogenic annotation file
+
+
+
+## Final Project
+
+### 1.Download bam file of patient1
+```
+wget http://vannberg.biology.gatech.edu/data/DCM/MenPa001DNA/Patient1_RG_MD_IR_BQ.bam
+wget http://vannberg.biology.gatech.edu/data/DCM/MenPa001DNA/Patient1_RG_MD_IR_BQ.bai
+```
+
+### 2.Perform variant call analysis using GATK-HaplotyeCaller
+```
+lib/jre1.8.0_101/bin/java -Xmx4g -jar lib/GenomeAnalysisTK.jar -T HaplotypeCaller -R input_files/ref_genome/hg19.fa -I Patient1_RG_MD_IR_BQ.bam --genotyping_mode DISCOVERY -stand_emit_conf 10 -stand_call_conf 30 -o p1_raw_variants.vcf
+```
+
+### 3.Perform variants recalibration analysis using GATK-VariantRecalibrator
+```
+lib/jre1.8.0_101/bin/java -Xmx4g -jar lib/GenomeAnalysisTK.jar -T VariantRecalibrator -R input_files
+lib/jre1.8.0_101/bin/java -Xmx4g -jar lib/GenomeAnalysisTK.jar -T ApplyRecalibration -R input_files/ref_genome/hg19.fa -input p1_raw_variants.vcf -mode SNP --ts_filter_level 99.0 -recalFile p1_recalibrate_SNP.recal -tranchesFile p1_recalibrate_SNP.tranches -o p1_recalibrated_snps_raw_indels.vcf
+```
+
+### 4.Create dcm-related 6 genes' genome position bed file
+```
+scripts/grep_gen_list.pl
+```
+
+### 5.Extract the dcm-related 6 genes' genomic variants
+```
+bedtools intersect -wa -header -a p1_recalibrated_snps_raw_indels.vcf -b scripts/temp/exom_list.bed > patient1_dcm_final.vcf
+```
+
+### 6.Calculat the reads depth information for DCM genes
+#### 6.1.Get depth for each gene
+```
+samtools view -L scripts/temp/exom_list.bed Patient1_RG_MD_IR_BQ.bam -b > patient1.dcm.bam
+```
+
+#### 6.2.Reporting genome coverage
+```
+bedtools genomecov -ibam patient1.dcm.bam -bga > patient1.dcm.bed
+```
+
+#### 6.3.Read coverage for each gene
+```
+bedtools intersect -split -a patient1.dcm.bed -b scripts/temp/exom_list.bed -bed > scripts/temp/patient1.final.bed
+python scripts/depth_for_each_site.py
+scripts/label.pl scripts/temp/patient1.final.full.txt patient1.final.full.labeled.txt
+```
+
+### 7.Coverage plotting
+```
+cp patient1.final.full.labeled.txt scripts/txt/p1.final.txt
+R CMD BATCH '--args scripts/txt/p1.final.txt' scripts/plots.R
+```
+- R 3.14 with package ggplot2 needed
+
+
+
+### 8.Vcf analysis reporting
+```
+cp patient1_dcm_final.vcf scripts/vcf/P1_afterinter.vcf
+python scripts/min.py
+cp scripts/vcf/*new.vcf SNP_report/
+```
 
 
