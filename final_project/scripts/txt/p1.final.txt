@@ -1,0 +1,1 @@
+chr	site	depth	LMNA	TNNT2	SCNSA	MYBPC3	MYH6	MYH7

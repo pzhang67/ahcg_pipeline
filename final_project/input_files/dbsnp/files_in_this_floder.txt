@@ -1,0 +1,2 @@
+dbsnp_138.hg19.vcf
+dbsnp_138.hg19.vcf.idx

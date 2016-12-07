@@ -1,0 +1,3 @@
+hg19.fa.fai
+hg19.dict
+hg19.fa

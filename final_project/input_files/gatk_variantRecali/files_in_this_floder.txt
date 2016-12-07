@@ -1,0 +1,9 @@
+1000G_omni2.5.hg19.sites.vcf.gz.tbi
+1000G_omni2.5.hg19.sites.vcf.idx
+1000G_omni2.5.hg19.sites.vcf
+1000G_phase1.snps.high_confidence.hg19.sites.vcf.gz.tbi
+1000G_phase1.snps.high_confidence.hg19.sites.vcf.idx
+1000G_phase1.snps.high_confidence.hg19.sites.vcf
+hapmap_3.3.hg19.sites.vcf.gz.tbi
+hapmap_3.3.hg19.sites.vcf.idx
+hapmap_3.3.hg19.sites.vcf
