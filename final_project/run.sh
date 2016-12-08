@@ -66,30 +66,13 @@ else
 fi
 
 
-if R CMD BATCH '--args scripts/txt/p1.final.txt' scripts/plots.R
+if Rscript scripts/plots.R
     then echo "Cutoff for sequencing result created"
     else
         echo "error"
         echo "Usage $8"
 fi
-cp boxplot.exons.LMNA.jpg SNP_report/boxplots/P1.boxplot.exons.LMNA.jpg
-cp boxplot.exons.MYBPC3.jpg SNP_report/boxplots/P1.boxplot.exons.MYBPC3.jpg
-cp boxplot.exons.MYH6.jpg SNP_report/boxplots/P1.boxplot.exons.MYH6.jpg
-cp boxplot.exons.MYH7.jpg SNP_report/boxplots/P1.boxplot.exons.MYH7.jpg
-cp boxplot.exons.SCNSA.jpg SNP_report/boxplots/P1.boxplot.exons.SCNSA.jpg
-cp boxplot.exons.TNNT2.jpg SNP_report/boxplots/P1.boxplot.exons.TNNT2.jpg
-rm boxplot.exons.LMNA.jpg boxplot.exons.MYBPC3.jpg boxplot.exons.MYH6.jpg boxplot.exons.MYH7.jpg boxplot.exons.SCNSA.jpg boxplot.exons.TNNT2.jpg
-cp cutoff.MYH7.csv SNP_report/cutoffs/P1.cutoff.MYH7.csv
-cp cutoff.MYH6.csv SNP_report/cutoffs/P1.cutoff.MYH6.csv
-cp cutoff.LMNA.csv SNP_report/cutoffs/P1.cutoff.LMNA.csv
-cp cutoff.TNNT2.csv SNP_report/cutoffs/P1.cutoff.TNNT2.csv
-cp cutoff.SCNSA.csv SNP_report/cutoffs/P1.cutoff.SCNSA.csv
-cp cutoff.MYBPC3.csv SNP_report/cutoffs/P1.cutoff.MYBPC3.csv
-rm cutoff.MYH7.csv cutoff.MYH6.csv cutoff.LMNA.csv cutoff.TNNT2.csv cutoff.SCNSA.csv cutoff.MYBPC3.csv
 
-
-cp cutoff.final.csv scripts/cutoff/P1cutoff.final.csv
-rm P1cutoff.final.csv
 
 if bedtools intersect -wa -a p1_recalibrated_snps_raw_indels.vcf -b scripts/temp/exom_list.bed > scripts/vcf/P1_afterinter.vcf
     then echo "Vcf Input"

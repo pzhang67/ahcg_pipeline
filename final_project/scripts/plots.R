@@ -5,8 +5,8 @@ library(ggplot2)
 #------------
 # read input
 #-----------
-args <- commandArgs(TRUE)
-dt <- read.table(args[1],colClasses= c("character", rep("integer", 8)) ,header = TRUE,row.names=NULL)
+#args <- commandArgs(TRUE)
+dt <- read.table("scripts/txt/p1.final.txt",colClasses= c("character", rep("integer", 8)) ,header = TRUE,row.names=NULL)
 m<-dim(dt)[2]
 #----------
 # function
@@ -55,9 +55,11 @@ plots.function = function (dt)
 ## boxplots
 ##----------------
     maximum.y<-max(unlist(cut.off.exons$cutoff.max)) +20
+    pdf(paste("SNP_report/boxplots/P1.boxplot.exons.",genes.name[k],"pdf",sep="."))
     p<-ggplot(data = dt.gene[chr.coo.null,], aes(x= factor(EXON), y= DEPTH)) + geom_boxplot(outlier.colour = "green", outlier.size = 1 ,aes(group = cut_width(EXON, 0.25)))
     p+ ggtitle("Boxplots of Depth by Exons") + xlab("Exons") + ylab("Depth") + scale_y_continuous(breaks=seq(0,maximum.y,20))
-    ggsave(filename=paste("SNP_report/boxplots/boxplot.exons",genes.name[k],"jpg",sep="."), width = 6.7, height = 6.7)
+    dev.off()
+    #ggsave(filename=paste("boxplot.exons",genes.name[k],"png",sep="."), width = 6.7, height = 6.7)
 ##-----------------------------------
 ## gene cutoff and exons cutoff table
 ##---------------------------------- 
@@ -66,7 +68,7 @@ plots.function = function (dt)
     stat<-matrix(c(median,quantile, cut.off.exons$cutoff),ncol=2+(cut.off.exons$max-cut.off.exons$min +1),byrow=TRUE)
     rownames(stat)<-genes.name[k]
     colnames(stat)<-c("median","90th_quantile",c(cut.off.exons$min:cut.off.exons$max))
-    write.csv(stat,file=paste("SNP_report/cutoffs/cutoff",genes.name[k],"csv",sep="."))
+    write.csv(stat,file=paste("scripts/cutoff/cutoff",genes.name[k],"csv",sep="."))
     
     list.cutoffs<-c(genes.name[k],rep("NULL",cut.off.exons$min-1))
     list.cutoffs<-append(list.cutoffs,cut.off.exons$cutoff)
