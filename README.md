@@ -392,7 +392,6 @@ python scripts/min.py
 #### 8.2.Potential Pathogenic SNP repoert
 ```
 cp scripts/vcf/*new.vcf SNP_report/
-
 perl scripts/fliter.pl
 ```
 - Collum 5 stands for the existence of the SNP in control.
