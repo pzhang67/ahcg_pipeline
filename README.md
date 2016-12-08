@@ -375,14 +375,29 @@ cp patient1.final.full.labeled.txt scripts/txt/p1.final.txt
 R CMD BATCH '--args scripts/txt/p1.final.txt' scripts/plots.R
 ```
 - R 3.14 with package ggplot2 needed
+- Cutoff for each exom was created in cutoff.final.csv
 
 
 
 ### 8.Vcf analysis reporting
+#### 8.1.SNP varification by depth
 ```
 cp patient1_dcm_final.vcf scripts/vcf/P1_afterinter.vcf
 python scripts/min.py
-cp scripts/vcf/*new.vcf SNP_report/
 ```
+- Depth - Cutoff > 5 : Mutation confirmed
+- Depth - Cutoff between 0 ~ 5 : Ambiguous sequencing result
+- Depth - Cutoff < 0 : Mutation untrusted
+
+#### 8.2.Potential Pathogenic SNP repoert
+```
+cp scripts/vcf/*new.vcf SNP_report/
+
+perl scripts/fliter.pl
+```
+- Collum 5 stands for the existence of the SNP in control.
+- Collum 5 stands for the existence of the SNP in patients.
+
+(Mutation confirmed += 1; Ambiguous sequencing result += 0.6; Mutation untrusted += 0; Not exist in control = -1)
 
 
